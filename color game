@@ -1,0 +1,83 @@
+#list of possible color
+colours=['Red','Blue','Green','Pink','Black', 
+           'Yellow','Orange','White','Purple','Brown']
+score=0
+#the game time left initially 30 sec
+timeleft=30
+
+#function that will satrt the game
+def gamestart(event):
+    if timeleft==30:
+        #start the count down timer
+        countdown()
+    #run the function to choose the next color
+    nextcolor()
+
+#function to choose and display the next color:
+def nextcolor():
+    global score
+    global timeleft
+    
+    #if game is currently in playing
+    if timeleft>0:
+        
+        #make the text entry box active
+        e.focus_set()
+        
+        #if the color typed is equal to the text
+        if e.get().lower()==colours[1].lower():
+            score+=1
+        #clear the text entry box
+        e.delete(0,tk.END)
+        
+        random.shuffle(colours)
+        
+        # change the colour to type, by changing the 
+        # text _and_ the colour to a random colour value 
+        label.config(fg = str(colours[1]), text = str(colours[0])) 
+          
+        # update the score. 
+        scoreLabel.config(text = "Score: " + str(score))
+#countdown timer fuction
+def countdown():
+    global timeleft
+    if timeleft>0:
+        timeleft-=1
+        # update the time left label 
+        timeLabel.config(text = "Time left: "
+                           + str(timeleft)) 
+
+        # run the function again after 1 second. 
+        timeLabel.after(1000, countdown)
+#driver code
+root=tk.Tk()
+root.title("COLORGAME")
+root.geometry("375x200")
+#add a instruction label
+instruction=tk.Label(root,text="Type in the colour"
+                        "of the words, and not the word text!",font = ('Helvetica', 12))
+instruction.pack()
+#add a score label
+scoreLabel = tk.Label(root, text = "Press enter to start", 
+                                      font = ('Helvetica', 12)) 
+scoreLabel.pack()
+# add a time left label 
+timeLabel = tk.Label(root, text = "Time left: " +
+              str(timeleft), font = ('Helvetica', 12)) 
+                
+timeLabel.pack() 
+# add a label for displaying the colours 
+label = tk.Label(root, font = ('Helvetica', 60)) 
+label.pack() 
+# add a text entry box for 
+# typing in colours 
+e=tk.Entry(root)
+# run the 'startGame' function  
+# when the enter key is pressed 
+root.bind('<Return>',gamestart)
+e.pack()
+# set focus on the entry box 
+e.focus_set() 
+  
+# start the GUI 
+root.mainloop() 
